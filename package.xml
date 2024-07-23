@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>ramp_apriltag_detector</name>
+  <version>1.1.0</version>
+  <description>Detector for apriltags for RAMP</description>
+
+  <license>BSD</license>
+
+  <maintainer email="mitch@robots.ox.ac.uk">Alexander Mitchell</maintainer>
+  <maintainer email="kaye@robots.ox.ac.uk">Ben Kaye</maintainer>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <exec_depend>apriltag</exec_depend>
+  <exec_depend>apriltag_ros</exec_depend>
+</package>
