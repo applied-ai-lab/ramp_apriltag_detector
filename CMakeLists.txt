@@ -22,4 +22,5 @@ catkin_install_python(PROGRAMS
 
 include_directories(${catkin_INCLUDE_DIRS})
 
+FILE(GLOB python_examples "${CMAKE_CURRENT_SOURCE_DIR}/scripts/*")
 install(DIRECTORY launch/ DESTINATION ${CATKIN_PACKAGE_SHARE_DESTINATION}/launch)

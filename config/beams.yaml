@@ -3,9 +3,25 @@ beams:
   tags:
   - id: 3
     name: t1_beam1
+    offset:
+      qw: 0.0
+      qx: 1.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0086
+      y: 0.1152
+      z: 0.0037
     size: 0.019
   - id: 4
     name: t2_beam1
+    offset:
+      qw: -0.9993
+      qx: -0.0091
+      qy: -0.0153
+      qz: 0.0336
+      x: -0.0086
+      y: -0.1152
+      z: -0.0037
     size: 0.019
 links:
 - id: 25

@@ -288,6 +288,8 @@ def overwrite_beamconfig(config_file, beam_name, offsets):
 def listen_to(beam_tracker, mode:str= 'detect'):
     tags_names = beam_tracker.tags()
 
+    print(tags_names)
+
     tf_buffer = tf2_ros.Buffer()
     listener = tf2_ros.TransformListener(tf_buffer)
 

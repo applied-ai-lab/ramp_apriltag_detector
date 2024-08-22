@@ -8,6 +8,6 @@
 
     <param name="mode" value="$(arg mode)"/>
 
-    <node name="beam_tracking" pkg="beam_perception" type="beam_perception.py" output="screen" />
+    <node name="beam_tracking" pkg="perceive_beam" type="beam_perception.py" output="screen" />
 
 </launch>
