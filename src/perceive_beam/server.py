@@ -1,63 +1,63 @@
-import rospy
 
+import rospy
 from geometry_msgs.msg import TransformStamped, Transform, Vector3, Quaternion
 import yaml
 from dataclasses import dataclass
 import numpy as np
-import math
-
+from scipy.spatial.transform import Rotation as R
 import tf2_ros
-
-
 import logging
-
 logger = logging.Logger(__name__)
 
 
 @dataclass
-class NumpyTransform:
-    translation: np.array
-    rotation: np.array
+class ScTf:
+    '''Scipy Transform'''
+    lin: np.ndarray
+    rot: R
 
     def __str__(self) -> str:
         p_str = ", ".join(
-            f"p.{c}: {v:.3f}" for c, v in zip(["x", "y", "z"], self.translation)
+            f"p.{c}: {v:.3f}" for c, v in zip(["x", "y", "z"], self.lin)
         )
         q_str = ", ".join(
-            f"q.{c}: {v:.3f}" for c, v in zip(["x", "y", "z", "w"], self.rotation)
+            f"q.{c}: {v:.3f}" for c, v in zip(["x", "y", "z", "w"], self.rot.as_quat())
         )
         return f"{p_str}, {q_str}"
+    
+    def apply(self, arg:  np.ndarray) ->  np.ndarray:
+        '''left compose self with arg transform'''
+        if isinstance(arg, ScTf):
+            return ScTf(self.rot.apply(arg.lin) + self.lin,  apply_rot(self.rot, arg.rot))
+        elif isinstance(arg, np.ndarray):
+            return self.rot.apply(arg) + self.lin
+        raise ValueError('argument type not supported')
+    
+    def inv(self):
+        inv_rot = self.rot.inv()
+        return ScTf(-inv_rot.apply(self.lin), inv_rot)
+
+def apply_rot(rot_a:R, rot_b:R) -> R:
+    '''return composition of rot_b then rot_a'''
+
+    assert isinstance(rot_a, R), 'must be scipy.transform.rotation.R'
+    return rot_a * rot_b
 
 
-def apply_quat(quat_a, quat_b):
-    x0, y0, z0, w0 = quat_a
-    x1, y1, z1, w1 = quat_b
-    return np.array(
-        [
-            -x1 * x0 - y1 * y0 - z1 * z0 + w1 * w0,
-            x1 * w0 + y1 * z0 - z1 * y0 + w1 * x0,
-            -x1 * z0 + y1 * w0 + z1 * x0 + w1 * y0,
-            x1 * y0 - y1 * x0 + z1 * w0 + w1 * z0,
-        ],
-        dtype=np.float64,
-    )
+def compose(a:ScTf, b:ScTf):
+    '''composition of B then A transforms'''
+    # return T = A B
+    return a.apply(b)
+
+def rot_inv(rot:R)->R:
+
+    return rot.inv()
 
 
-def quat_conj(quat):
-    x0, y0, z0, w0 = quat
-    return np.array([-x0, -y0, -z0, w0], dtype=np.float64)
-
-
-def quat_inv(quat):
-    return quat_conj(np.real(quat)) / math.sqrt(
-        np.real(sum(quat[None, :] @ quat[:, None]))
-    )
-
-
-def quat_diff(p, q):
+def rot_diff(p, q) -> R:
     """returns pq^-1"""
     # this is the rotation from q to p
-    return apply_quat(p, quat_inv(q))
+    return apply_rot(p, rot_inv(q))
 
 
 def mean_quaternion(q_list: list):
@@ -79,13 +79,14 @@ def dct_to_NumpyTransform(dct):
         return None
     x = dct
     lin = np.array((x['x'], x['y'], x['z']))
-    rot = np.array((x['qx'], x['qy'], x['qz'], x['qw']))
-    return NumpyTransform(lin, rot)
+    rot = R.from_quat(np.array((x['qx'], x['qy'], x['qz'], x['qw'])))
+    return ScTf(lin, rot)
+
 @dataclass
 class Beam:
     name: str
     beam_tags: list  # list[Tag]
-    transform: Transform
+    transform: ScTf
 
     def offsets(self):
 
@@ -96,7 +97,7 @@ class Beam:
     
         
 
-    def calc_origin(self, mean_rot=False) -> NumpyTransform:
+    def calc_origin(self) -> ScTf:
         n = len(self.beam_tags)
 
         transforms = [t.transform for t in self.beam_tags]
@@ -107,18 +108,14 @@ class Beam:
             dtype=np.float64,
         )
         for t in transforms:
-            p += t.translation
+            p += t.lin
         p /= n
 
-        if mean_rot:
-            q = mean_quaternion([t.rotation for t in transforms])
-        else:
+        # use the transform of the first tag
+        q = self.beam_tags[0].transform.rot
+        # q = np.array([0.0, 0.0, 0.0, 1.0])
 
-            # use the transform of the first tag
-            q = self.beam_tags[0].transform.rotation
-            # q = np.array([0.0, 0.0, 0.0, 1.0])
-
-        self.transform = NumpyTransform(p, q)
+        self.transform = ScTf(p, q)
 
         return self.transform
 
@@ -129,10 +126,7 @@ class Beam:
             return
 
         return {
-            tag.name: NumpyTransform(
-                tag.transform.translation - self.transform.translation,
-                quat_diff(tag.transform.rotation, self.transform.rotation,),
-            )
+            tag.name: tag.transform.apply(self.transform.inv())
             for tag in self.beam_tags
         }
 
@@ -140,9 +134,9 @@ class Beam:
 @dataclass
 class Tag:
     name: str
-    transform: NumpyTransform
+    transform: ScTf
     parent: Beam = None
-    offset: NumpyTransform = None
+    offset: ScTf = None
 
 
             
@@ -179,12 +173,12 @@ class Beamtracker:
 def tf_to_NumpyTransform(tf):
     p = tf.translation
     q = tf.rotation
-    return NumpyTransform(np.array([p.x, p.y, p.z]), np.array([q.x, q.y, q.z, q.w]))
+    return ScTf(np.array([p.x, p.y, p.z]), R.from_quat(np.array([q.x, q.y, q.z, q.w])))
 
-def NumpyTransform_to_tf(npt:NumpyTransform):
+def NumpyTransform_to_tf(npt:ScTf):
     tf = Transform()
-    tf.translation = Vector3(*npt.translation)
-    tf.rotation = Quaternion(*npt.rotation)
+    tf.translation = Vector3(*npt.lin)
+    tf.rotation = Quaternion(*npt.rot.as_quat())
     return tf
 
 
@@ -197,9 +191,9 @@ def NumpyTransform_to_tf(npt:NumpyTransform):
 #     for tf in frames:
 #         process_tf(tf)
 
-def NumpyTransform_to_dct(tf: NumpyTransform) -> dict:
+def NumpyTransform_to_dct(tf: ScTf) -> dict:
     keys = ('x', 'y', 'z', 'qx', 'qy', 'qz', 'qw')
-    return {k:round(float(v), 4) for k,v in zip(keys, (*tf.translation, *tf.rotation))}
+    return {k:round(float(v), 4) for k,v in zip(keys, (*tf.lin, *tf.rot.as_quat()))}
 
 
 def configure_beam(data: TransformStamped, beam_tracker: Beamtracker):
@@ -254,14 +248,15 @@ def get_beamposition(data: TransformStamped, beam_tracker: Beamtracker,
     beam_tfstamped.header.frame_id = data.header.frame_id
     beam_tfstamped.child_frame_id = beam.name
 
-    beam_to_tag = beam.offsets()[tag_id]
+    beam_to_tag: ScTf = beam.offsets()[tag_id]
 
     # invert the local offset
-    beam_pose = NumpyTransform(
-                tag_world.translation + beam_to_tag.translation,
-                apply_quat(tag_world.rotation, beam_to_tag.rotation),
-                # np.array([0.0, 0.0, 0.0, 1.0])
-                    )
+    # beam_pose = NumpyTransform(
+    #             tag_world.translation - beam_to_tag.translation,
+    #             apply_quat(tag_world.rotation, beam_to_tag.rotation),
+    #             # np.array([0.0, 0.0, 0.0, 1.0])
+    #                 )
+    beam_pose = beam_to_tag.inv().apply(tag_world)
 
     beam_tfstamped.transform = NumpyTransform_to_tf(beam_pose)
 
