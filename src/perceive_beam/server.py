@@ -38,7 +38,6 @@ class ScTf:
                 rot=apply_rot(left.rot, right.rot),
             )
         elif isinstance(right, np.ndarray):
-
             # transform applied to vector
             return apply_rot(left.rot, right) + left.lin
         raise ValueError("argument type not supported")
@@ -46,8 +45,6 @@ class ScTf:
     def inv(self):
         inv_rot = R.from_quat(self.rot).inv().as_quat()
         return ScTf(lin=apply_rot(inv_rot, -self.lin), rot=inv_rot)
-
-
 
 
 def apply_rot(rot_a: R, rot_b: R) -> R:
@@ -65,11 +62,23 @@ def apply_rot(rot_a: R, rot_b: R) -> R:
     raise ValueError("argument type not supported")
 
 
-def compose(a: ScTf, b: ScTf):
-    """composition of B then A transforms"""
-    # return T = A B
-    return a.apply(b)
+def compose(*transforms):
+    '''apply transforms in sequence order'''
 
+    if len(transforms) == 0:
+        raise ValueError
+
+    # solve edge case of not unpacking transforms
+    if isinstance(transforms[0], list):
+        if len(transforms) > 1:
+            raise ValueError
+        transforms = transforms[0]
+
+
+    transform = transforms[-1]
+    for T in reversed(transforms[:-1]):
+        transform = T.apply(transform)
+    return transform
 
 def rot_inv(rot: R) -> R:
     return rot.inv()
@@ -112,18 +121,17 @@ class Beam:
     transform: ScTf
 
     def offsets(self):
-        if all(t.offset is not None for t in self.beam_tags):
-            return {t.name: t.offset for t in self.beam_tags}
+        if all(t.beam_to_tag is not None for t in self.beam_tags):
+            return {t.name: t.beam_to_tag for t in self.beam_tags}
 
     def calc_origin(self) -> ScTf:
-        '''compute beam origin from tags, requires all tags to be present'''
+        """compute beam origin from tags, requires all tags to be present"""
 
         n = len(self.beam_tags)
 
-        tag_transforms = [tag.transform for tag in self.beam_tags]
+        tag_transforms = [tag.world_transform for tag in self.beam_tags]
         if any(t is None for t in tag_transforms):
             return
-        
 
         # get mean of tag positions
         mean_lin = np.array(
@@ -135,7 +143,7 @@ class Beam:
         mean_lin /= n
 
         # use the rotation  of the first tag
-        rotation = self.beam_tags[0].transform.rot
+        rotation = self.beam_tags[0].world_transform.rot
         # q = np.array([0.0, 0.0, 0.0, 1.0])
 
         self.transform = ScTf(mean_lin, rotation)
@@ -148,20 +156,20 @@ class Beam:
         if self.transform is None:
             return
 
-
         world_to_beam = self.transform
+
+        # this SHOULD be a dictionary of tag_id: beam_to_tag transform
         return {
-            tag.name: tag.transform.apply(world_to_beam.inv())
-            for tag in self.beam_tags
+            tag.name: compose(world_to_beam.inv(), tag.world_transform) for tag in self.beam_tags
         }
 
 
 @dataclass
 class Tag:
     name: str
-    transform: ScTf
+    world_transform: ScTf
     parent: Beam = None
-    offset: ScTf = None
+    beam_to_tag: ScTf = None
 
 
 class Beamtracker:
@@ -185,7 +193,7 @@ class Beamtracker:
                         t["name"],
                         None,
                         beam_obj,
-                        offset=dct_to_NumpyTransform(t.get("offset", None)),
+                        beam_to_tag=dct_to_NumpyTransform(t.get("offset", None)),
                     ),
                 )
                 for t in b["tags"]
@@ -216,17 +224,6 @@ def ScTf_to_tf(npt: ScTf):
     tf.rotation = Quaternion(*npt.rot)
     return tf
 
-
-# def tf_callback(data: TfMessage, beam_tracker: Beamtracker):
-
-#     tags_names = beam_tracker.tags()
-
-#     frames = (t for t in data.transforms() if t.child_frame_id in tags_names)
-
-#     for tf in frames:
-#         process_tf(tf)
-
-
 def ScTf_to_dct(tf: ScTf) -> dict:
     keys = ("x", "y", "z", "qx", "qy", "qz", "qw")
     return {k: float(v) for k, v in zip(keys, (*tf.lin, *tf.rot))}
@@ -243,14 +240,13 @@ def configure_beam(data: TransformStamped, beam_tracker: Beamtracker):
 
     # is this a peg? if so return None, store transform
     if is_link:
-        beam_tracker.link_tags[tag_id].transform = tf_to_ScTf(tf)
+        beam_tracker.link_tags[tag_id].world_transform = tf_to_ScTf(tf)
         return
-
 
     # if beam....
 
     tag = beam_tracker.beam_tags[tag_id]
-    tag.transform = tf_to_ScTf(tf)
+    tag.world_transform = tf_to_ScTf(tf)
 
     beam: Beam = tag.parent
     res = beam.calc_origin()
@@ -275,7 +271,7 @@ def get_beamposition(
     # filter with Finite MA(?)
 
     if is_link:
-        beam_tracker.link_tags[tag_id].transform = tf_to_ScTf(tf)
+        beam_tracker.link_tags[tag_id].world_transform = tf_to_ScTf(tf)
         return
 
     tag = beam_tracker.beam_tags[tag_id]
@@ -291,13 +287,7 @@ def get_beamposition(
 
     beam_to_tag: ScTf = beam.offsets()[tag_id]
 
-    # invert the local offset
-    # beam_pose = NumpyTransform(
-    #             tag_world.translation - beam_to_tag.translation,
-    #             apply_quat(tag_world.rotation, beam_to_tag.rotation),
-    #             # np.array([0.0, 0.0, 0.0, 1.0])
-    #                 )
-    beam_pose = beam_to_tag.inv().apply(tag_world)
+    beam_pose = compose(tag_world, beam_to_tag.inv())
 
     beam_tfstamped.transform = ScTf_to_tf(beam_pose)
 
@@ -317,6 +307,7 @@ def overwrite_beamconfig(config_file, beam_name, offsets):
 
     with open(config_file, "w") as f:
         yaml.safe_dump(beams_dct, f)
+
 
 def listen_to(beam_tracker, mode: str = "detect"):
     tags_names = beam_tracker.tags()
@@ -339,7 +330,7 @@ def listen_to(beam_tracker, mode: str = "detect"):
             for tf in transforms:
                 if mode == "detect":
                     # skip stale TFs
-                    if rospy.Time.now()- tf.header.stamp > rospy.Duration(5.0):
+                    if rospy.Time.now() - tf.header.stamp > rospy.Duration(5.0):
                         continue
 
                     tf_to_publish = get_beamposition(tf, beam_tracker)
@@ -358,16 +349,3 @@ def listen_to(beam_tracker, mode: str = "detect"):
         ) as e:
             rate.sleep()
 
-
-if __name__ == "__main__":
-    rospy.init_node("beam_perception")
-    # rospy.subscriber('/tag_detections')
-
-    beam_tracker = Beamtracker()
-    listen_to(beam_tracker, mode="detect")
-
-    # rospy.Subscriber("tf", TfMessage, callback=tf_callback, callback_args=beam_tracker)
-    # rospy.spin()
-    # while True:
-    #     import time
-    #     time.sleep(60.)
