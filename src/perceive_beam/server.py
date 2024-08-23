@@ -304,10 +304,15 @@ def overwrite_beamconfig(config_file, beam_name, offsets):
         for k, v in offsets.items():
             if k == tag_dct.get("name"):
                 tag_dct["offset"] = ScTf_to_dct(v)
-
-    with open(config_file, "w") as f:
-        yaml.safe_dump(beams_dct, f)
-
+    
+    try:
+        with open(config_file, "w") as f:
+            yaml.safe_dump(beams_dct, f)
+            
+    except KeyboardInterrupt as e:
+        with open(config_file, "w") as f:
+            yaml.safe_dump(beams_dct, f)
+        raise KeyboardInterrupt
 
 def listen_to(beam_tracker, mode: str = "detect"):
     tags_names = beam_tracker.tags()
