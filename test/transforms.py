@@ -1,4 +1,4 @@
-from perceive_beam.server import ScTf, compose
+from ramp_apriltag_detector.server import ScTf, compose
 
 import numpy as np
 from scipy.spatial.transform import Rotation as R
