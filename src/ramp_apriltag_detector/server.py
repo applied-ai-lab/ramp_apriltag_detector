@@ -1,4 +1,5 @@
 import rospy
+import rospkg
 from geometry_msgs.msg import TransformStamped, Transform, Vector3, Quaternion
 import yaml
 from dataclasses import dataclass
@@ -176,9 +177,7 @@ class Beamtracker:
     def __init__(self) -> None:
         import os
 
-        self.path = os.path.join(
-            "/".join(__file__.split("/")[:-1]), "../../config/beams.yaml"
-        )
+        self.path = os.path.join(rospkg.RosPack().get_path('ramp_apriltag_detector'), "config", "beams.yaml")
         self.beam_config = yaml.safe_load(open(self.path))
 
         self.beams = {}
@@ -314,7 +313,7 @@ def overwrite_beamconfig(config_file, beam_name, offsets):
             yaml.safe_dump(beams_dct, f)
         raise KeyboardInterrupt
 
-def listen_to(beam_tracker, mode: str = "detect"):
+def listen_to(beam_tracker: Beamtracker, mode: str = "detect"):
     tags_names = beam_tracker.tags()
 
     print(tags_names)
@@ -332,6 +331,7 @@ def listen_to(beam_tracker, mode: str = "detect"):
                 tf_buffer.lookup_transform("camera_link", tf_id, rospy.Time(0))
                 for tf_id in tags_names
             )
+            # tf in a list transforms
             for tf in transforms:
                 if mode == "detect":
                     # skip stale TFs
