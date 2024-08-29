@@ -15,18 +15,20 @@ if __name__ == "__main__":
     beam_names = Beamtracker().beam_names
     
     # Create an instance of a filter
-    # Filter dim must be 7
-    dim = 7
+    # Filter dim must be 6
+    dim = 6
     # Sampling frequency 
     dt = 1.0 / 30.0 # Seconds
     damping_ratio = 0.8 # Slightly under damped with no ringing
-    rise_time = 1.0 # Seconds
+    rise_time = 2.0 # Seconds
     
     params = LTIBaseParams(rise_time, damping_ratio)
     filter = DiscreteManualLTI(dim, params, dt)
+
+    parent_frame = "camera_link"
     
     # Create the tf filter
-    tf_filter = FilterTf(beam_names, filter)
+    tf_filter = FilterTf(beam_names, filter, parent_frame)
     
     # Filter tfs
     tf_filter()
