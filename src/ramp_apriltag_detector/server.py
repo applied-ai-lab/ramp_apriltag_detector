@@ -211,7 +211,8 @@ class Beamtracker:
     
     @property
     def beam_names(self):
-        self._beam_names = list(beam.name for beam in self.beams.values)
+        self._beam_names = list(beam.name for beam in self.beams.values())
+        return self._beam_names
 
     def tags(self):
         return tuple(list(self.beam_tags.keys()) + list(self.link_tags.keys()))
