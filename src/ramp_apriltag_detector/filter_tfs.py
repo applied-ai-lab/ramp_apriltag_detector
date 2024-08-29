@@ -11,7 +11,7 @@ from lti_filters.discrete_filters import DiscreteManualLTI
 
 
 class FilterTf:
-    def __init__(self, tf_names: list[str], filter: DiscreteManualLTI, parent_frame: str = None) -> None:
+    def __init__(self, tf_names: list[str], filter: DiscreteManualLTI) -> None:
         self._tf_names = tf_names
         self._tf_dict = dict.fromkeys(self._tf_names, None)
         self._tf_dict_filtered = dict.fromkeys(self._tf_names, None)
@@ -22,11 +22,9 @@ class FilterTf:
         self._filter_dict = dict((key, value) for key, value in zip(self._tf_names, filters))
         
         self._filter_input = np.zeros(7)
-        
-        if parent_frame:
-            self._parent_frame = parent_frame
-        else:
-            self._parent_frame = "base_link"
+            
+    def __call__(self, *args: Any, **kwds: Any) -> None:
+        return self.find_tfs()
 
     def find_tfs(self) -> None:
         
