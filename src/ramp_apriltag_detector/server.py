@@ -182,6 +182,8 @@ class Beamtracker:
 
         self.beams = {}
         self.beam_tags = {}
+        
+        self._beam_names = []
 
         for b in self.beam_config["beams"]:
             beam_obj = Beam(b["name"], None, None)
@@ -206,6 +208,10 @@ class Beamtracker:
         self.link_tags = {
             link["name"]: Tag(link["name"], None) for link in self.beam_config["links"]
         }
+    
+    @property
+    def beam_names(self):
+        self._beam_names = list(beam.name for beam in self.beams.values)
 
     def tags(self):
         return tuple(list(self.beam_tags.keys()) + list(self.link_tags.keys()))
