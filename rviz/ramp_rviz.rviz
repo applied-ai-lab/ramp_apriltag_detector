@@ -64,10 +64,6 @@ Visualization Manager:
           Value: false
         base_link:
           Value: false
-        beam1:
-          Value: false
-        beam1_filtered:
-          Value: false
         beam2:
           Value: false
         beam2_filtered:
@@ -258,32 +254,20 @@ Visualization Manager:
           Value: false
         screw1_filtered:
           Value: true
-        screw2:
-          Value: false
-        screw2_filtered:
-          Value: true
-        t1_beam1:
-          Value: false
-        t1_beam1_filtered:
-          Value: false
         t1_beam2:
-          Value: true
+          Value: false
         t1_beam2_filtered:
           Value: false
         t1_beam3:
-          Value: true
+          Value: false
         t1_beam3_filtered:
           Value: false
-        t2_beam1:
-          Value: false
-        t2_beam1_filtered:
-          Value: false
         t2_beam2:
-          Value: true
+          Value: false
         t2_beam2_filtered:
           Value: false
         t2_beam3:
-          Value: true
+          Value: false
         t2_beam3_filtered:
           Value: false
         top_link:
@@ -376,10 +360,6 @@ Visualization Manager:
                                 realsense_mount_link:
                                   camera_bottom_screw_frame:
                                     camera_link:
-                                      beam1:
-                                        {}
-                                      beam1_filtered:
-                                        {}
                                       beam2:
                                         {}
                                       beam2_filtered:
@@ -392,15 +372,9 @@ Visualization Manager:
                                         camera_color_optical_frame:
                                           screw1:
                                             {}
-                                          screw2:
-                                            {}
-                                          t1_beam1:
-                                            {}
                                           t1_beam2:
                                             {}
                                           t1_beam3:
-                                            {}
-                                          t2_beam1:
                                             {}
                                           t2_beam2:
                                             {}
@@ -417,15 +391,9 @@ Visualization Manager:
                                           {}
                                       screw1_filtered:
                                         {}
-                                      screw2_filtered:
-                                        {}
-                                      t1_beam1_filtered:
-                                        {}
                                       t1_beam2_filtered:
                                         {}
                                       t1_beam3_filtered:
-                                        {}
-                                      t2_beam1_filtered:
                                         {}
                                       t2_beam2_filtered:
                                         {}
@@ -487,47 +455,6 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        camera_bottom_screw_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_color_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_color_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_depth_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_depth_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_infra1_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_infra1_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_infra2_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_infra2_optical_frame:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        camera_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         chassis_link:
           Alpha: 1
           Show Axes: false
@@ -554,11 +481,6 @@ Visualization Manager:
           Show Trail: false
           Value: true
         front_cover_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        front_laser:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -715,40 +637,7 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
-        ptu_base_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        ptu_mount_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-        ptu_pan_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ptu_tilt_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        ptu_tilted_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        realsense_mount_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
         rear_cover_link:
-          Alpha: 1
-          Show Axes: false
-          Show Trail: false
-          Value: true
-        rear_laser:
           Alpha: 1
           Show Axes: false
           Show Trail: false
@@ -902,6 +791,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        riser_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         top_link:
           Alpha: 1
           Show Axes: false
@@ -957,9 +851,9 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.49540042877197266
+      Pitch: 0.6254004240036011
       Target Frame: <Fixed Frame>
-      Yaw: 0.005399112589657307
+      Yaw: 0.030399110168218613
     Saved: ~
 Window Geometry:
   Displays:
