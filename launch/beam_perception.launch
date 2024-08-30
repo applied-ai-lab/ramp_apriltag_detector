@@ -6,6 +6,8 @@
     <!-- Launch the april tag detector -->
     <include file="$(find ramp_apriltag_detector)/launch/continuous_detector.launch"/> 
 
+    <include file="$(find ramp_apriltag_detector)/launch/tf_filter.launch"/> 
+
     <param name="mode" value="$(arg mode)"/>
 
     <node name="beam_tracking" pkg="ramp_apriltag_detector" type="beam_perception.py" output="screen" />
