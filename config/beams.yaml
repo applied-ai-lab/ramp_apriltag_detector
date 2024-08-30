@@ -2,7 +2,7 @@ beams:
 - name: beam1
   tags:
   - id: 3
-    name: t1_beam1
+    name: t1_beam1_filtered
     offset:
       qw: -1.0
       qx: 0.0
@@ -13,7 +13,7 @@ beams:
       z: -0.0006936737727231135
     size: 0.019
   - id: 4
-    name: t2_beam1
+    name: t2_beam1_filtered
     offset:
       qw: 0.008991752269345121
       qx: -0.003503881971565981
@@ -26,7 +26,7 @@ beams:
 - name: beam2
   tags:
   - id: 9
-    name: t1_beam2
+    name: t1_beam2_filtered
     offset:
       qw: -1.0
       qx: 0.0
@@ -37,7 +37,7 @@ beams:
       z: -0.00174961296655457
     size: 0.019
   - id: 10
-    name: t2_beam2
+    name: t2_beam2_filtered
     offset:
       qw: -0.002518785129344503
       qx: -0.006463089871480199
@@ -50,7 +50,7 @@ beams:
 - name: beam3
   tags:
   - id: 11
-    name: t1_beam3
+    name: t1_beam3_filtered
     offset:
       qw: -1.0
       qx: 0.0
@@ -61,7 +61,7 @@ beams:
       z: -0.002340485609202969
     size: 0.019
   - id: 12
-    name: t2_beam3
+    name: t2_beam3_filtered
     offset:
       qw: -0.027818229357769064
       qx: -0.008039155288955435
@@ -73,8 +73,8 @@ beams:
     size: 0.019
 links:
 - id: 25
-  name: screw1
+  name: screw1_filtered
   size: 0.019
 - id: 23
-  name: screw2
+  name: screw2_filtered
   size: 0.019
