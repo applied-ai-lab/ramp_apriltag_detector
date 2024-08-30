@@ -333,31 +333,32 @@ def listen_to(beam_tracker: Beamtracker, mode: str = "detect"):
 
     while not rospy.is_shutdown():
         rate = rospy.Rate(30.0)
-        try:
-            transforms = (
+        transforms = []
+        for tf_id in tags_names:
+            try:
+                transforms.append(
                 tf_buffer.lookup_transform("camera_link", tf_id, rospy.Time(0))
-                for tf_id in tags_names
-            )
-            # tf in a list transforms
-            for tf in transforms:
-                if mode == "detect":
-                    # skip stale TFs
-                    if rospy.Time.now() - tf.header.stamp > rospy.Duration(5.0):
-                        continue
-
-                    tf_to_publish = get_beamposition(tf, beam_tracker)
-                    if tf_to_publish is not None:
-                        #
-
-                        br.sendTransform(tf_to_publish)
-
-                elif mode == "config":
-                    configure_beam(tf, beam_tracker)
-
-        except (
+                )
+            except (
             tf2_ros.LookupException,
             tf2_ros.ConnectivityException,
-            tf2_ros.ExtrapolationException,
-        ) as e:
-            rate.sleep()
+            tf2_ros.ExtrapolationException) as e:
+                continue
+                
+        # tf in a list transforms
+        for tf in transforms:
+            if mode == "detect":
+                # skip stale TFs
+                if rospy.Time.now() - tf.header.stamp > rospy.Duration(5.0):
+                    continue
+
+                tf_to_publish = get_beamposition(tf, beam_tracker)
+                if tf_to_publish is not None:
+                    #
+                    br.sendTransform(tf_to_publish)
+
+            elif mode == "config":
+                configure_beam(tf, beam_tracker)
+
+        rate.sleep()
 
