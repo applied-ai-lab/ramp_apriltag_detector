@@ -43,35 +43,33 @@ class FilterTf:
         
         while not rospy.is_shutdown():
             rate = rospy.Rate(30.0)
-            try:
-                # Get the tf transform
-                for tf_id in self._tf_names:
-                    self._tf_dict[tf_id] = tf_buffer.lookup_transform(self._parent_frame, tf_id, rospy.Time(0))          
-                # Update the filtered transforms
-                for tf_id in self._tf_names:
-                    # Check to see if the filtered transforms are initialised
-                    if self._tf_dict_filtered[tf_id] is None:
+            # Get the tf transform
+            for tf_id in self._tf_names:
+                try:
+                    self._tf_dict[tf_id] = tf_buffer.lookup_transform(self._parent_frame, tf_id, rospy.Time(0))   
+                except (
+                        tf2_ros.LookupException,
+                        tf2_ros.ConnectivityException,
+                        tf2_ros.ExtrapolationException,
+                        ) as e:       
+                        continue
+            # Update the filtered transforms
+            for tf_id in self._tf_names:
+                # Check to see if the filtered transforms are initialised
+                if self._tf_dict_filtered[tf_id] is None:
+                    if self._tf_dict[tf_id]:
                         # Create the filtered tf 
                         self._tf_dict_filtered[tf_id] = self.create_filtered_tf(self._tf_dict[tf_id])
                         # Initialise the filter
                         self.initialise_filter(tf_id, self._tf_dict[tf_id])
-                    # If filtered transforms is set
-                    else:
-                        # Use the current value of the tf_dict_filtered as the previous tf and the latest
-                        # update in tf_dict as the latest update
-                        self.advance_filter(tf_id, self._tf_dict_filtered[tf_id], self._tf_dict[tf_id])
-
+                # If filtered transforms is set
+                else:
+                    # Use the current value of the tf_dict_filtered as the previous tf and the latest
+                    # update in tf_dict as the latest update
+                    self.advance_filter(tf_id, self._tf_dict_filtered[tf_id], self._tf_dict[tf_id])
                     # Publish the filtered transform
                     self._tf_dict_filtered[tf_id].header.stamp = rospy.Time.now()
                     broadcaster.sendTransform(self._tf_dict_filtered[tf_id])
-                    
-            
-            except (
-                tf2_ros.LookupException,
-                tf2_ros.ConnectivityException,
-                tf2_ros.ExtrapolationException,
-            ) as e:
-                rate.sleep()
         return
     
     @staticmethod
