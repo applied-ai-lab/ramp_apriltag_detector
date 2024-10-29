@@ -7,7 +7,6 @@ import numpy as np
 from scipy.spatial.transform import Rotation as R
 import tf2_ros
 import logging
-import copy
 
 logger = logging.Logger(__name__)
 
