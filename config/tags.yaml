@@ -48,7 +48,7 @@ standalone_tags:
     },
     { id: 3, size: 0.019, name: t1_beam1 },
     { id: 4, size: 0.019, name: t2_beam1 },
-    { id: 25, size: 0.019, name: screw1 },
+    { id: 22, size: 0.019, name: screw1 },
     # { id: 8, size: 0.019, name: a },
     # { id: 15, size: 0.019, name: b },
     # { id: 31, size: 0.019, name: c },
