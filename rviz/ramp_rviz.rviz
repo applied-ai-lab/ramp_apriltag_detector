@@ -1,6 +1,6 @@
 Panels:
   - Class: rviz/Displays
-    Help Height: 78
+    Help Height: 138
     Name: Displays
     Property Tree Widget:
       Expanded:
@@ -9,7 +9,7 @@ Panels:
         - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.7683284282684326
-    Tree Height: 725
+    Tree Height: 1790
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -362,12 +362,20 @@ Visualization Manager:
           Value: true
         right_pregrasp:
           Value: true
+        t2_beam3:
+          Value: false
+        t2_beam3_filtered:
+          Value: false
+        table_origin:
+          Value: true
+        top_link:
+          Value: false
       Marker Alpha: 1
-      Marker Scale: 0.5
+      Marker Scale: 0.23999999463558197
       Name: TF
       Show Arrows: false
       Show Axes: true
-      Show Names: true
+      Show Names: false
       Tree:
         base_link:
           left_beam:
@@ -684,6 +692,47 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        camera_bottom_screw_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_color_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_color_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_depth_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_depth_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_infra1_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_infra1_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_infra2_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_infra2_optical_frame:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        camera_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         chassis_link:
           Alpha: 1
           Show Axes: false
@@ -866,6 +915,34 @@ Visualization Manager:
           Alpha: 1
           Show Axes: false
           Show Trail: false
+        ptu_base_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ptu_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+        ptu_pan_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ptu_tilt_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        ptu_tilted_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
+        realsense_mount_link:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         rear_cover_link:
           Alpha: 1
           Show Axes: false
@@ -1025,6 +1102,11 @@ Visualization Manager:
           Show Axes: false
           Show Trail: false
           Value: true
+        table_origin:
+          Alpha: 1
+          Show Axes: false
+          Show Trail: false
+          Value: true
         top_link:
           Alpha: 1
           Show Axes: false
@@ -1064,7 +1146,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.796372890472412
+      Distance: 1.3179500102996826
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -1098,7 +1180,7 @@ Window Geometry:
   Tool Properties:
     collapsed: false
   Views:
-    collapsed: true
-  Width: 924
-  X: 996
-  Y: 27
+    collapsed: false
+  Width: 3700
+  X: 140
+  Y: 54

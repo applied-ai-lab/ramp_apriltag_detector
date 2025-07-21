@@ -2,8 +2,6 @@ from typing import Any, List
 import copy
 
 import numpy as np
-# from pyquaternion import Quaternion as pyquat
-# from liegroups import SO3
 from scipy.spatial.transform import Rotation as R
 from scipy.spatial.transform import Slerp
 import rospy
