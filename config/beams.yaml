@@ -10,7 +10,7 @@ beams:
       qz: 0.0
       x: 0.0
       y: -0.04
-      z: 0.00
+      z: -0.038
     size: 0.028
 - name: beam1_hole
   tags:
@@ -23,7 +23,7 @@ beams:
       qz: 0.0
       x: 0.0
       y: -0.04
-      z: 0.00
+      z: -0.038
     size: 0.028
 - name: beam0
   tags:
