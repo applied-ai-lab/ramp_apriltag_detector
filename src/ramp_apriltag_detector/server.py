@@ -234,34 +234,6 @@ def ScTf_to_dct(tf: ScTf) -> dict:
     return {k: float(v) for k, v in zip(keys, (*tf.lin, *tf.rot))}
 
 
-def configure_beam(data: TransformStamped, beam_tracker: Beamtracker):
-    tf = data.transform
-    tag_id = data.child_frame_id
-
-    is_link = bool(tag_id in beam_tracker.link_tags)
-    # store position
-    # if both positions exist publish relative transform
-    # filter with Finite MA(?)
-
-    # is this a peg? if so return None, store transform
-    if is_link:
-        beam_tracker.link_tags[tag_id].world_transform = tf_to_ScTf(tf)
-        return
-
-    # if beam....
-
-    tag = beam_tracker.beam_tags[tag_id]
-    tag.world_transform = tf_to_ScTf(tf)
-
-    beam: Beam = tag.parent
-    res = beam.calc_origin()
-    if res is not None:
-        offsets = beam.beam_to_tags()
-        overwrite_beamconfig(beam_tracker.path, beam.name, offsets)
-        offsets = {t: str(v) for t, v in offsets.items()}
-        logging.info(f"{beam.name}: {offsets}")
-
-
 def get_beamposition(
     data: TransformStamped,
     beam_tracker: Beamtracker,
@@ -357,9 +329,5 @@ def listen_to(beam_tracker: Beamtracker, mode: str = "detect"):
                 if tf_to_publish is not None:
                     #
                     br.sendTransform(tf_to_publish)
-
-            elif mode == "config":
-                configure_beam(tf, beam_tracker)
-
         rate.sleep()
 
