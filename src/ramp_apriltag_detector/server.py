@@ -202,7 +202,7 @@ class Beamtracker:
 
             self.beams[b["name"]] = beam_obj
             for t, T in tags:
-                self.beam_tags[t] = T
+                self.beam_tags.setdefault(t, []).append(T)
 
         self.link_tags = {
             link["name"]: Tag(link["name"], None) for link in self.beam_config["links"]
@@ -249,26 +249,24 @@ def get_beamposition(
 
     if is_link:
         beam_tracker.link_tags[tag_id].world_transform = tf_to_ScTf(tf)
-        return
-
-    tag = beam_tracker.beam_tags[tag_id]
+        return []
 
     tag_world = tf_to_ScTf(tf)
 
-    beam: Beam = tag.parent
+    results = []
+    for tag in beam_tracker.beam_tags[tag_id]:
+        beam: Beam = tag.parent
+        beam_to_tag: ScTf = beam.offsets()[tag_id]
+        beam_pose = compose(tag_world, beam_to_tag.inv())
 
-    beam_tfstamped = TransformStamped()
-    beam_tfstamped.header.stamp = rospy.Time.now()
-    beam_tfstamped.header.frame_id = data.header.frame_id
-    beam_tfstamped.child_frame_id = beam.name
+        beam_tfstamped = TransformStamped()
+        beam_tfstamped.header.stamp = rospy.Time.now()
+        beam_tfstamped.header.frame_id = data.header.frame_id
+        beam_tfstamped.child_frame_id = beam.name
+        beam_tfstamped.transform = ScTf_to_tf(beam_pose)
+        results.append(beam_tfstamped)
 
-    beam_to_tag: ScTf = beam.offsets()[tag_id]
-
-    beam_pose = compose(tag_world, beam_to_tag.inv())
-
-    beam_tfstamped.transform = ScTf_to_tf(beam_pose)
-
-    return beam_tfstamped
+    return results
 
 
 def overwrite_beamconfig(config_file, beam_name, offsets):
@@ -286,7 +284,7 @@ def overwrite_beamconfig(config_file, beam_name, offsets):
         with open(config_file, "w") as f:
             yaml.safe_dump(beams_dct, f)
             
-    except KeyboardInterrupt as e:
+    except KeyboardInterrupt:
         with open(config_file, "w") as f:
             yaml.safe_dump(beams_dct, f)
         raise KeyboardInterrupt
@@ -314,7 +312,7 @@ def listen_to(beam_tracker: Beamtracker):
             except (
             tf2_ros.LookupException,
             tf2_ros.ConnectivityException,
-            tf2_ros.ExtrapolationException) as e:
+            tf2_ros.ExtrapolationException):
                 continue
                 
         # tf in a list transforms
@@ -323,8 +321,7 @@ def listen_to(beam_tracker: Beamtracker):
             if rospy.Time.now() - tf.header.stamp > rospy.Duration(5.0):
                 continue
 
-            tf_to_publish = get_beamposition(tf, beam_tracker)
-            if tf_to_publish is not None:
+            for tf_to_publish in get_beamposition(tf, beam_tracker):
                 br.sendTransform(tf_to_publish)
         rate.sleep()
 
