@@ -39,7 +39,7 @@
   <arg name="tag_ids"        default="[0,1,2,3,4,5,6,7,8,9,10,11]"
        doc="Tag IDs to look up in TF. Defaults to the 12 tags on the
             calibration sheet."/>
-  <arg name="parent_frame"   default="camera_link"
+  <arg name="parent_frame"   default="base_link"
        doc="Parent frame for the lookup_transform calls. The relative
             pose metrics are invariant to this choice as long as both
             tags in a pair are looked up against the same parent in the
