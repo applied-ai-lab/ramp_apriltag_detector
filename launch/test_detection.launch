@@ -2,7 +2,7 @@
   <!-- ── AprilTag detectors ─────────────────────────────────────────── -->
      <include file="$(find ramp_apriltag_detector)/launch/continuous_detector.launch"/>
      <include file="$(find ramp_apriltag_detector)/launch/tf_filter.launch"/> 
-    <!-- <node name="beam_tracking" pkg="ramp_apriltag_detector" type="beam_perception.py" output="screen" /> -->
+    <node name="beam_tracking" pkg="ramp_apriltag_detector" type="beam_perception.py" output="screen" />
      <node name="ramp_rviz" pkg="rviz" type="rviz" respawn="false"	args="-d $(find ramp_apriltag_detector)/rviz/ramp_rviz.rviz" />
 
 

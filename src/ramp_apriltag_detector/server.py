@@ -291,7 +291,7 @@ def overwrite_beamconfig(config_file, beam_name, offsets):
             yaml.safe_dump(beams_dct, f)
         raise KeyboardInterrupt
 
-def listen_to(beam_tracker: Beamtracker, mode: str = "detect"):
+def listen_to(beam_tracker: Beamtracker):
     tags_names = beam_tracker.tags()
 
     print(tags_names)
@@ -301,8 +301,7 @@ def listen_to(beam_tracker: Beamtracker, mode: str = "detect"):
     
     parent_frame = "base_link"
 
-    if mode == "detect":
-        br = tf2_ros.TransformBroadcaster()
+    br = tf2_ros.TransformBroadcaster()
 
     while not rospy.is_shutdown():
         rate = rospy.Rate(30.0)
@@ -320,14 +319,12 @@ def listen_to(beam_tracker: Beamtracker, mode: str = "detect"):
                 
         # tf in a list transforms
         for tf in transforms:
-            if mode == "detect":
                 # skip stale TFs
-                if rospy.Time.now() - tf.header.stamp > rospy.Duration(5.0):
-                    continue
+            if rospy.Time.now() - tf.header.stamp > rospy.Duration(5.0):
+                continue
 
-                tf_to_publish = get_beamposition(tf, beam_tracker)
-                if tf_to_publish is not None:
-                    #
-                    br.sendTransform(tf_to_publish)
+            tf_to_publish = get_beamposition(tf, beam_tracker)
+            if tf_to_publish is not None:
+                br.sendTransform(tf_to_publish)
         rate.sleep()
 

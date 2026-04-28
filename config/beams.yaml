@@ -1,29 +1,55 @@
 beams:
-- name: beam0_female
+- name: beam0_hole
   tags:
   - id: 0
     name: tag0_beam0_female_filtered
     offset:
-      qw: -1.0
+      qw: 1.0
       qx: 0.0
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.0
-      z: 0.0
+      y: -0.04
+      z: 0.00
     size: 0.028
-- name: beam1_male
+- name: beam1_hole
   tags:
   - id: 1
     name: tag1_beam1_male_filtered
     offset:
-      qw: -1.0
+      qw: 1.0
       qx: 0.0
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.0
-      z: 0.0
+      y: -0.04
+      z: 0.00
+    size: 0.028
+- name: beam0
+  tags:
+  - id: 0
+    name: tag0_beam0_female_filtered
+    offset:
+      qw: 1.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0
+      y: 0.175
+      z: 0.025
+    size: 0.028
+- name: beam1
+  tags:
+  - id: 1
+    name: tag1_beam1_male_filtered
+    offset:
+      qw: 1.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0
+      y: 0.142
+      z: 0.025
     size: 0.028
 links:
 - id: 2
