@@ -6,6 +6,7 @@ from lti_filters.discrete_filters import (DiscreteManualLTI, LTIBaseParams)
 
 from ramp_apriltag_detector.filter_tfs import FilterTf
 from ramp_apriltag_detector.server import Beamtracker
+from ramp_apriltag_detector.FIR_filter import LowPassFilterCoefficients, DiscreteFIRFilter
 
 
 def extract_tag_names(tag_list):
@@ -35,8 +36,10 @@ if __name__ == "__main__":
     damping_ratio = 1.0 #CHANGED 2.0->1.0 Slightly under damped with no ringing
     rise_time = 0.4 # CHANGED 0.8-> 0.4 Seconds
     
-    params = LTIBaseParams(rise_time, damping_ratio)
-    filter = DiscreteManualLTI(dim, params, dt)
+    # params = LTIBaseParams(rise_time, damping_ratio)
+    # filter = DiscreteManualLTI(dim, params, dt)
+    filter_coefs = LowPassFilterCoefficients()
+    filter = DiscreteFIRFilter(dim,filter_coefs)
 
     # parent_frame = "camera_link"
     parent_frame = "base_link"

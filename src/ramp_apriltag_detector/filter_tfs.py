@@ -45,6 +45,7 @@ class FilterTf:
         rate = rospy.Rate(30) # 30Hz filtering frequency
         while not rospy.is_shutdown():
             # Get the tf transform
+            # Side-effect, preserves the last transform if nothing was found.
             for tf_id in self._tf_names:
                 try:
                     self._tf_dict[tf_id] = self._tf_buffer.lookup_transform(self._parent_frame, tf_id, rospy.Time(0))   
@@ -54,9 +55,10 @@ class FilterTf:
                         tf2_ros.ExtrapolationException,
                         ) as e:       
                         continue
+                
             # Update the filtered transforms
             for tf_id in self._tf_names:
-                # Set the previous tf to current tf
+                # Set the previous tf to current tf if none?
                 if self._tf_prev[tf_id] is None:
                     self._tf_prev[tf_id] = self._tf_dict[tf_id]
                 
@@ -125,7 +127,6 @@ class FilterTf:
                                                tf_prev.rotation.w]))
 
         # rot_delta_mat = np.matmul(self._rot_new.as_dcm(), rot_prev.as_dcm().transpose())
-
         self._filter_input[0:3] = copy.deepcopy(self._trans_new)
         
         filter_arr = copy.deepcopy(self._filter_dict[tf_id].advance(self._filter_input))
@@ -134,10 +135,35 @@ class FilterTf:
         self._tf_dict_filtered[tf_id].transform.translation.y = copy.deepcopy(filter_arr[1])
         self._tf_dict_filtered[tf_id].transform.translation.z = copy.deepcopy(filter_arr[2])
 
+
+        # 1. Get Quaternions as numpy arrays
+        q_new = self._rot_new.as_quat()
+        q_prev = self._rot_prev.as_quat()
+
+        # 2. FIXED: The "Shortest Path" / Sign-Flip Bug
+        # Quaternions q and -q represent the same rotation.
+        # Slerp can spin 360 degrees if we don't ensure they are in the same hemisphere.
+        if np.dot(q_prev, q_new) < 0:
+            q_new = -q_new
+            # Re-create the rotation object with the flipped sign
+            self._rot_new = R.from_quat(q_new)
+
+        # 3. Create Slerp object (Using DCM for SciPy 1.3.3 compatibility)
         slerp = Slerp([0.0, 1.0], R.from_dcm([self._rot_prev.as_dcm(), self._rot_new.as_dcm()]))
 
-        filtered_rotation = slerp([0.3])[0] # Changed for faster, 0.1->0.3
+        # 4. Interpolate and extract
+        # We use [0.3] as a list to satisfy SciPy's 1D array requirement
+        filtered_rotation = slerp([0.3])[0] 
         quat_new_filtered = filtered_rotation.as_quat()
+
+        # 5. FIXED: Normalization
+        # Over time, math errors can make the quaternion length != 1.0, which ROS hates.
+        norm = np.linalg.norm(quat_new_filtered)
+        if norm > 0:
+            quat_new_filtered /= norm
+        else:
+            # Fallback to previous if something went catastrophically wrong
+            quat_new_filtered = q_prev
         
         self._tf_dict_filtered[tf_id].transform.rotation.x = copy.deepcopy(quat_new_filtered[0])
         self._tf_dict_filtered[tf_id].transform.rotation.y = copy.deepcopy(quat_new_filtered[1])
