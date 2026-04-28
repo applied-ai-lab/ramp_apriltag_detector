@@ -1,0 +1,94 @@
+<launch>
+  <!-- ═══════════════════════════════════════════════════════════════════
+       AprilTag perception precision experiment.
+
+       Starts the AprilTag detector(s), then waits for the operator to run
+       the experiment node from a separate terminal (see "Usage" below).
+
+       The experiment node:
+         1. Subscribes to TF for the configured tag frames.
+         2. On each ENTER keypress, snapshots all currently-visible tags.
+         3. After N snapshots (default 5), computes pair-wise relative-pose
+            errors against the ground-truth layout printed on the
+            calibration sheet (page 2 of apriltag_calibration_sheet.pdf).
+         4. Writes histograms and a CSV to <output_dir>.
+
+       Workflow:
+         Terminal 1:
+           roslaunch ramp_apriltag_detector accuracy_experiment.launch
+         Terminal 2:
+           rosrun ramp_apriltag_detector apriltag_precision_test.py
+
+       Pass through any of the args below at launch time, e.g.
+         roslaunch ramp_apriltag_detector accuracy_experiment.launch \
+             tag_family:=tag16h5  parent_frame:=base_link
+
+       Note: the experiment is NOT started inside this launch file because
+       it reads stdin (ENTER -> snapshot). Running it from its own terminal
+       keeps it free of detector log spam and gives clean interactive I/O.
+  ════════════════════════════════════════════════════════════════════ -->
+
+  <!-- ── Detector args ──────────────────────────────────────────────── -->
+  <arg name="use_side_cameras" default="false"
+       doc="Also start left/right arm camera detectors."/>
+
+  <!-- ── Experiment args (forwarded to the experiment node, displayed
+          on screen so the user can copy them into the rosrun command) ── -->
+  <arg name="tag_family"     default="tag16h5"
+       doc="AprilTag family. Must match what the detector is configured for."/>
+  <arg name="tag_ids"        default="[0,1,2,3,4,5,6,7,8,9,10,11]"
+       doc="Tag IDs to look up in TF. Defaults to the 12 tags on the
+            calibration sheet."/>
+  <arg name="parent_frame"   default="camera_link"
+       doc="Parent frame for the lookup_transform calls. The relative
+            pose metrics are invariant to this choice as long as both
+            tags in a pair are looked up against the same parent in the
+            same snapshot."/>
+  <arg name="frame_pattern"  default="tag_{:d}"
+       doc="Python printf-style pattern that maps an int tag ID to the
+            corresponding TF frame name. The default matches the
+            apriltag_ros convention 'tag_&lt;id&gt;'."/>
+  <arg name="num_snapshots"  default="5"
+       doc="Number of ENTER-triggered snapshots to collect before the
+            report is generated."/>
+  <arg name="output_dir"     default="$(find ramp_apriltag_detector)/experiment_results/$(arg tag_family)"
+       doc="Directory for the per-pair CSV and histogram PNGs."/>
+  <arg name="lookup_timeout" default="0.5"
+       doc="Per-tag TF lookup timeout in seconds."/>
+
+  <!-- ── AprilTag detectors ─────────────────────────────────────────── -->
+  <include file="$(find ramp_apriltag_detector)/launch/continuous_detector.launch"/>
+
+  <group if="$(arg use_side_cameras)">
+    <include file="$(find ramp_apriltag_detector)/launch/left_continuous_detector.launch"/>
+    <include file="$(find ramp_apriltag_detector)/launch/right_continuous_detector.launch"/>
+  </group>
+
+  <!-- ── Experiment-node parameters (set on the parameter server so the
+          rosrun invocation can pick them up via private-name lookups) ── -->
+  <group ns="apriltag_precision_test">
+    <param name="tag_family"     value="$(arg tag_family)"/>
+    <param name="parent_frame"   value="$(arg parent_frame)"/>
+    <param name="frame_pattern"  value="$(arg frame_pattern)"/>
+    <param name="num_snapshots"  value="$(arg num_snapshots)"/>
+    <param name="output_dir"     value="$(arg output_dir)"/>
+    <param name="lookup_timeout" value="$(arg lookup_timeout)"/>
+    <rosparam param="tag_ids" subst_value="True">$(arg tag_ids)</rosparam>
+  </group>
+
+  <!-- ── Operator instructions ──────────────────────────────────────── -->
+  <!-- The experiment runner reads stdin (ENTER -> snapshot), so it is
+       intentionally launched separately. Once the detectors are up and
+       publishing tag frames, run in a fresh terminal:
+
+         rosrun ramp_apriltag_detector apriltag_precision_test.py
+
+       The node will pick up the parameters set above from
+       /apriltag_precision_test/* . To override at runtime, pass them as
+       private params, e.g.
+
+         rosrun ramp_apriltag_detector apriltag_precision_test.py \
+             _num_snapshots:=10  _parent_frame:=base_link
+  -->
+
+</launch>
