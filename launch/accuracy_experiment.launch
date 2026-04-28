@@ -44,7 +44,7 @@
             pose metrics are invariant to this choice as long as both
             tags in a pair are looked up against the same parent in the
             same snapshot."/>
-  <arg name="frame_pattern"  default="tag_{:d}"
+  <arg name="frame_pattern"  default="tag{:d}"
        doc="Python printf-style pattern that maps an int tag ID to the
             corresponding TF frame name. The default matches the
             apriltag_ros convention 'tag_&lt;id&gt;'."/>
@@ -90,5 +90,7 @@
          rosrun ramp_apriltag_detector apriltag_precision_test.py \
              _num_snapshots:=10  _parent_frame:=base_link
   -->
+      <node name="ramp_rviz" pkg="rviz" type="rviz" respawn="false"	args="-d $(find ramp_apriltag_detector)/rviz/ramp_rviz.rviz" />
+
 
 </launch>

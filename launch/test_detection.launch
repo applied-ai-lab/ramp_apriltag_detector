@@ -1,0 +1,8 @@
+<launch>
+  <!-- ── AprilTag detectors ─────────────────────────────────────────── -->
+     <include file="$(find ramp_apriltag_detector)/launch/continuous_detector.launch"/>
+     <include file="$(find ramp_apriltag_detector)/launch/tf_filter.launch"/> 
+     <node name="ramp_rviz" pkg="rviz" type="rviz" respawn="false"	args="-d $(find ramp_apriltag_detector)/rviz/ramp_rviz.rviz" />
+
+
+</launch>

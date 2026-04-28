@@ -1,110 +1,31 @@
 beams:
-- name: beam1
+- name: beam0_female
   tags:
-  - id: 28
-    name: t1_beam1_filtered
+  - id: 0
+    name: tag0_beam0_female_filtered
     offset:
       qw: -1.0
       qx: 0.0
       qy: 0.0
       qz: 0.0
-      x: -0.00050652979163332
-      y: 0.12121002550120444
-      z: -0.0004823196391912643
-    size: 0.019
-  - id: 29
-    name: t2_beam1_filtered
-    offset:
-      qw: 0.0018955002346812948
-      qx: -7.824579064630299e-05
-      qy: -0.02935117553397023
-      qz: 0.9995673611374227
-      x: 0.00050652979163332
-      y: -0.12121002550120442
-      z: 0.0004823196391911533
-    size: 0.019
-- name: beam2
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    size: 0.028
+- name: beam1_male
   tags:
-  - id: 34
-    name: t1_beam2_filtered
+  - id: 1
+    name: tag1_beam1_male_filtered
     offset:
       qw: -1.0
       qx: 0.0
       qy: 0.0
       qz: 0.0
-      x: -0.00023113641882352431
-      y: 0.09490688593408347
-      z: 0.0056642671161266644
-    size: 0.019
-  - id: 27
-    name: t2_beam2_filtered
-    offset:
-      qw: -0.006281541628362427
-      qx: 0.003418383951802272
-      qy: -0.04206448185736076
-      qz: 0.99908930344189
-      x: 0.00023113641882352431
-      y: -0.09490688593408347
-      z: -0.00566426711612672
-    size: 0.019
-- name: beam3
-  tags:
-  - id: 30
-    name: t1_beam3_filtered
-    offset:
-      qw: -1.0
-      qx: 0.0
-      qy: 0.0
-      qz: 0.0
-      x: 0.0014862447833894898
-      y: 0.12002408499678198
-      z: 0.0033858532056527113
-    size: 0.019
-  - id: 31
-    name: t2_beam3_filtered
-    offset:
-      qw: -0.007100501080076273
-      qx: 0.0037156097389802745
-      qy: -6.589263275941226e-05
-      qz: 0.9999678858777619
-      x: -0.0014862447833894898
-      y: -0.12002408499678197
-      z: -0.003385853205652656
-    size: 0.019
-- name: beam4
-  tags:
-  - id: 32
-    name: t1_beam4_filtered
-    offset:
-      qw: -1.0
-      qx: 0.0
-      qy: 0.0
-      qz: 0.0
-      x: -0.00017226649012913597
-      y: 0.09612042938886403
-      z: 0.0009857944016422593
-    size: 0.019
-  - id: 33
-    name: t2_beam4_filtered
-    offset:
-      qw: -0.007318001969321378
-      qx: 0.007006812904900683
-      qy: 0.0023949216979060528
-      qz: 0.9999458064166047
-      x: 0.00017226649012902495
-      y: -0.09612042938886403
-      z: -0.0009857944016424258
-    size: 0.019
+      x: 0.0
+      y: 0.0
+      z: 0.0
+    size: 0.028
 links:
-- id: 23
-  name: screw1_filtered
-  size: 0.019
-- id: 24
-  name: screw2_filtered
-  size: 0.019
-- id: 25
-  name: screw3_filtered
-  size: 0.019
-- id: 26
-  name: screw4_filtered
-  size: 0.019
+- id: 2
+  name: tag2_pin_filtered
+  size: 0.028

@@ -21,67 +21,21 @@
 #   ]
 standalone_tags:
   [
-    { 
-      id: 28, 
-      size: 0.019, 
-      name: t1_beam1 
-    },
-    { 
-      id: 29, 
-      size: 0.019, 
-      name: t2_beam1 
+    {
+      id: 0,
+      size: 0.028,
+      name: tag0_beam0_female
     },
     {
-      id: 34,
-      size: 0.019,
-      name: t1_beam2
+      id: 1,
+      size: 0.028,
+      name: tag1_beam1_male
     },
     {
-      id: 27,
-      size: 0.019,
-      name: t2_beam2
+      id: 2,
+      size: 0.028,
+      name: tag2_pin
     },
-    {
-      id: 30,
-      size: 0.019,
-      name: t1_beam3
-    },
-    {
-      id: 31,
-      size: 0.019,
-      name: t2_beam3
-    },
-    {
-      id: 32,
-      size: 0.019,
-      name: t1_beam4
-    },
-    {
-      id: 33,
-      size: 0.019,
-      name: t2_beam4
-    },
-    { 
-      id: 23, 
-      size: 0.019, 
-      name: screw1 
-    },
-    {
-      id: 24,
-      size: 0.019,
-      name: screw2
-    },
-    { 
-      id: 25,
-      size: 0.019, 
-      name: screw3 
-    },
-    {
-      id: 26,
-      size: 0.019,
-      name: screw4
-    }
-    
   ]
 # ## Tag bundle definitions
 # ### Remarks

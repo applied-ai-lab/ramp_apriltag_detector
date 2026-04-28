@@ -41,6 +41,8 @@ class FilterTf:
 
     def find_tfs(self) -> None:
         
+        # Add rate limiting to not consume 100% of CPU
+        rate = rospy.Rate(30) # 30Hz filtering frequency
         while not rospy.is_shutdown():
             # Get the tf transform
             for tf_id in self._tf_names:
@@ -75,6 +77,9 @@ class FilterTf:
                     # Publish the filtered transform
                     self._tf_dict_filtered[tf_id].header.stamp = rospy.Time.now()
                     self._broadcaster.sendTransform(self._tf_dict_filtered[tf_id])
+
+            # Sleep as to not consume 100% of the CPU
+            rate.sleep()
         return
     
     @staticmethod
@@ -119,7 +124,7 @@ class FilterTf:
                                                tf_prev.rotation.z, 
                                                tf_prev.rotation.w]))
 
-        # rot_delta_mat = np.matmul(self._rot_new.as_matrix(), rot_prev.as_matrix().transpose())
+        # rot_delta_mat = np.matmul(self._rot_new.as_dcm(), rot_prev.as_dcm().transpose())
 
         self._filter_input[0:3] = copy.deepcopy(self._trans_new)
         
@@ -129,9 +134,9 @@ class FilterTf:
         self._tf_dict_filtered[tf_id].transform.translation.y = copy.deepcopy(filter_arr[1])
         self._tf_dict_filtered[tf_id].transform.translation.z = copy.deepcopy(filter_arr[2])
 
-        slerp = Slerp([0.0, 1.0], R.from_matrix([self._rot_prev.as_matrix(), self._rot_new.as_matrix()]))
+        slerp = Slerp([0.0, 1.0], R.from_dcm([self._rot_prev.as_dcm(), self._rot_new.as_dcm()]))
 
-        filtered_rotation = slerp(0.1)
+        filtered_rotation = slerp([0.3])[0] # Changed for faster, 0.1->0.3
         quat_new_filtered = filtered_rotation.as_quat()
         
         self._tf_dict_filtered[tf_id].transform.rotation.x = copy.deepcopy(quat_new_filtered[0])

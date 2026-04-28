@@ -248,6 +248,30 @@ Visualization Manager:
           Value: true
         screw1_filtered:
           Value: true
+        tag0:
+          Value: true
+        tag1:
+          Value: true
+        tag2:
+          Value: true
+        tag3:
+          Value: true
+        tag4:
+          Value: true
+        tag5:
+          Value: true
+        tag6:
+          Value: true
+        tag7:
+          Value: true
+        tag8:
+          Value: true
+        tag9:
+          Value: true
+        tag10:
+          Value: true
+        tag11:
+          Value: true
         t1_beam1:
           Value: false
         t1_beam1_filtered:

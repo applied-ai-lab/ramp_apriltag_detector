@@ -18,8 +18,7 @@ tf2_ros)
 catkin_install_python(PROGRAMS
     scripts/beam_perception.py
     scripts/transform_filter.py
-    scripts/beam_experiment.py
-    scripts/precision_test.py
+    scripts/apriltag_precision_test.py
     test/transform_br.py
     DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
 )
