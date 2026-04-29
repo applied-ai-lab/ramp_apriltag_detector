@@ -9,13 +9,39 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: -0.04
+      y: -0.0425
       z: -0.038
     size: 0.028
 - name: beam1_hole
   tags:
   - id: 1
     name: tag1_beam1_male_filtered
+    offset:
+      qw: 1.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0
+      y: -0.04
+      z: -0.038
+    size: 0.028
+- name: beam2_hole
+  tags:
+  - id: 3
+    name: tag3_beam2_female_filtered
+    offset:
+      qw: 1.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0
+      y: -0.0425
+      z: -0.038
+    size: 0.028
+- name: beam3_hole
+  tags:
+  - id: 4
+    name: tag4_beam3_male_filtered
     offset:
       qw: 1.0
       qx: 0.0
@@ -35,8 +61,8 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.175
-      z: 0.025
+      y: 0.103
+      z: 0.0
     size: 0.028
 - name: beam1
   tags:
@@ -48,10 +74,39 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.142
-      z: 0.025
+      y: 0.085
+      z: 0.00
+    size: 0.028
+- name: beam2
+  tags:
+  - id: 3
+    name: tag3_beam2_female_filtered
+    offset:
+      qw: 1.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0
+      y: 0.103
+      z: 0.00
+    size: 0.028
+- name: beam3
+  tags:
+  - id: 4
+    name: tag4_beam3_male_filtered
+    offset:
+      qw: 1.0
+      qx: 0.0
+      qy: 0.0
+      qz: 0.0
+      x: 0.0
+      y: 0.085
+      z: 0.00
     size: 0.028
 links:
 - id: 2
   name: tag2_pin_filtered
+  size: 0.028
+- id: 5
+  name: tag5_pin_filtered
   size: 0.028

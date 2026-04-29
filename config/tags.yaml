@@ -36,6 +36,21 @@ standalone_tags:
       size: 0.028,
       name: tag2_pin
     },
+    {
+      id: 3,
+      size: 0.028,
+      name: tag3_beam2_female
+    },
+    {
+      id: 4,
+      size: 0.028,
+      name: tag4_beam3_male
+    },
+    {
+      id: 5,
+      size: 0.028,
+      name: tag5_pin
+    },
   ]
 # ## Tag bundle definitions
 # ### Remarks

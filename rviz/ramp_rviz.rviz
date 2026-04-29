@@ -9,7 +9,7 @@ Panels:
         - /TF1
         - /TF1/Frames1
       Splitter Ratio: 0.7683284282684326
-    Tree Height: 275
+    Tree Height: 641
   - Class: rviz/Selection
     Name: Selection
   - Class: rviz/Tool Properties
@@ -60,22 +60,42 @@ Visualization Manager:
       Frame Timeout: 15
       Frames:
         All Enabled: false
+        axle_link:
+          Value: false
         base_link:
+          Value: false
+        beam0:
+          Value: false
+        beam0_filtered:
+          Value: true
+        beam0_hole:
+          Value: false
+        beam0_hole_filtered:
           Value: false
         beam1:
           Value: false
         beam1_filtered:
           Value: true
+        beam1_hole:
+          Value: false
+        beam1_hole_filtered:
+          Value: false
         beam2:
           Value: false
         beam2_filtered:
           Value: true
-        exotica/Frame0Bworld_frame:
-          Value: true
-        beam4:
+        beam2_hole:
           Value: false
-        beam4_filtered:
+        beam2_hole_filtered:
+          Value: false
+        beam3:
+          Value: false
+        beam3_filtered:
           Value: true
+        beam3_hole:
+          Value: false
+        beam3_hole_filtered:
+          Value: false
         camera_bottom_screw_frame:
           Value: false
         camera_color_frame:
@@ -106,10 +126,6 @@ Visualization Manager:
           Value: false
         ewellix_mount_flange_link:
           Value: false
-        exotica/table_origin:
-          Value: true
-        exotica/world_frame:
-          Value: true
         front_cover_link:
           Value: false
         front_lights_link:
@@ -239,72 +255,36 @@ Visualization Manager:
         right_kinova_arm_spherical_wrist_2_link:
           Value: false
         right_kinova_arm_tool_frame:
-          Value: false
+          Value: true
         right_side_cover_link:
           Value: false
         riser_link:
           Value: false
-        screw1:
-          Value: true
-        screw1_filtered:
-          Value: true
-        tag0:
-          Value: true
-        tag1:
-          Value: true
-        tag2:
-          Value: true
-        tag3:
-          Value: true
-        tag4:
-          Value: true
-        tag5:
-          Value: true
-        tag6:
-          Value: true
-        tag7:
-          Value: true
-        tag8:
-          Value: true
-        tag9:
-          Value: true
-        tag10:
-          Value: true
-        tag11:
-          Value: true
-        t1_beam1:
-          Value: false
-        t1_beam1_filtered:
-          Value: true
-        t1_beam2:
-          Value: false
-        t1_beam2_filtered:
-          Value: true
-        t1_beam3:
-          Value: false
-        t1_beam3_filtered:
-          Value: true
-        t1_beam4:
-          Value: false
-        t1_beam4_filtered:
-          Value: true
-        t2_beam1:
-          Value: true
-        t2_beam1_filtered:
-          Value: true
-        t2_beam2:
-          Value: true
-        t2_beam2_filtered:
-          Value: true
-        t2_beam3:
-          Value: true
-        t2_beam3_filtered:
-          Value: true
-        t2_beam4:
-          Value: true
-        t2_beam4_filtered:
-          Value: true
         table_origin:
+          Value: false
+        tag0_beam0_female:
+          Value: false
+        tag0_beam0_female_filtered:
+          Value: false
+        tag1_beam1_male:
+          Value: false
+        tag1_beam1_male_filtered:
+          Value: false
+        tag2_pin:
+          Value: false
+        tag2_pin_filtered:
+          Value: true
+        tag3_beam2_female:
+          Value: false
+        tag3_beam2_female_filtered:
+          Value: false
+        tag4_beam3_male:
+          Value: false
+        tag4_beam3_male_filtered:
+          Value: false
+        tag5_pin:
+          Value: false
+        tag5_pin_filtered:
           Value: true
         top_link:
           Value: false
@@ -316,21 +296,37 @@ Visualization Manager:
       Show Names: true
       Tree:
         base_link:
+          beam0:
+            {}
+          beam0_filtered:
+            {}
+          beam0_hole:
+            {}
+          beam0_hole_filtered:
+            {}
           beam1:
             {}
           beam1_filtered:
+            {}
+          beam1_hole:
+            {}
+          beam1_hole_filtered:
             {}
           beam2:
             {}
           beam2_filtered:
             {}
+          beam2_hole:
+            {}
+          beam2_hole_filtered:
+            {}
           beam3:
             {}
           beam3_filtered:
             {}
-          beam4:
+          beam3_hole:
             {}
-          beam4_filtered:
+          beam3_hole_filtered:
             {}
           chassis_link:
             axle_link:
@@ -338,20 +334,15 @@ Visualization Manager:
                 {}
             front_cover_link:
               {}
-          exotica/Frame1Bworld_frame:
-            exotica/Frame1Aright_target:
+            front_lights_link:
               {}
-          exotica/Frame2Bworld_frame:
-            exotica/Frame2Aleft_forearm_target:
+            imu_link:
               {}
-          exotica/Frame3Bworld_frame:
-            exotica/Frame3Aright_forearm_target:
+            left_side_cover_link:
               {}
-          exotica/Frame4Bworld_frame:
-            exotica/Frame4Aleft_target:
+            rear_cover_link:
               {}
-          exotica/Frame5Bworld_frame:
-            exotica/Frame5Aright_target:
+            rear_lights_link:
               {}
             right_side_cover_link:
               {}
@@ -405,23 +396,17 @@ Visualization Manager:
                                       camera_link:
                                         camera_color_frame:
                                           camera_color_optical_frame:
-                                            screw1:
+                                            tag0_beam0_female:
                                               {}
-                                            t1_beam1:
+                                            tag1_beam1_male:
                                               {}
-                                            t1_beam2:
+                                            tag2_pin:
                                               {}
-                                            t1_beam3:
+                                            tag3_beam2_female:
                                               {}
-                                            t1_beam4:
+                                            tag4_beam3_male:
                                               {}
-                                            t2_beam1:
-                                              {}
-                                            t2_beam2:
-                                              {}
-                                            t2_beam3:
-                                              {}
-                                            t2_beam4:
+                                            tag5_pin:
                                               {}
                                         camera_depth_frame:
                                           camera_depth_optical_frame:
@@ -471,26 +456,17 @@ Visualization Manager:
                   {}
               top_link:
                 {}
-          screw1_filtered:
+          tag0_beam0_female_filtered:
             {}
-          t1_beam1_filtered:
+          tag1_beam1_male_filtered:
             {}
-          t1_beam2_filtered:
+          tag2_pin_filtered:
             {}
-          t1_beam3_filtered:
+          tag3_beam2_female_filtered:
             {}
-          t1_beam4_filtered:
+          tag4_beam3_male_filtered:
             {}
-          t2_beam1_filtered:
-            {}
-          t2_beam2_filtered:
-            {}
-          t2_beam3_filtered:
-            {}
-          t2_beam4_filtered:
-            {}
-        exotica/world_frame:
-          exotica/table_origin:
+          tag5_pin_filtered:
             {}
       Update Interval: 0
       Value: true
@@ -967,7 +943,7 @@ Visualization Manager:
   Views:
     Current:
       Class: rviz/Orbit
-      Distance: 2.07919979095459
+      Distance: 1.7746100425720215
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.05999999865889549
         Stereo Focal Distance: 1
@@ -983,17 +959,17 @@ Visualization Manager:
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.009999999776482582
-      Pitch: 0.48540130257606506
+      Pitch: 0.6004012823104858
       Target Frame: <Fixed Frame>
-      Yaw: 0.03539469093084335
+      Yaw: 0.0503946989774704
     Saved: ~
 Window Geometry:
   Displays:
-    collapsed: true
-  Height: 2272
-  Hide Left Dock: true
+    collapsed: false
+  Height: 1016
+  Hide Left Dock: false
   Hide Right Dock: true
-  QMainWindow State: 000000ff00000000fd0000000400000000000001dc000007ecfc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b000000ab00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000abfb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c0061007900730000000069000007ec0000017800fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000014f000007ecfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000069000007ec0000012300fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073a00000056fc0100000002fb0000000800540069006d006501000000000000073a0000058200fffffffb0000000800540069006d006501000000000000045000000000000000000000073a000007ec00000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
+  QMainWindow State: 000000ff00000000fd0000000400000000000001dc00000346fc0200000008fb0000001200530065006c0065006300740069006f006e00000001e10000009b0000005c00fffffffb0000001e0054006f006f006c002000500072006f007000650072007400690065007302000001ed000001df00000185000000abfb000000120056006900650077007300200054006f006f02000001df000002110000018500000122fb000000200054006f006f006c002000500072006f0070006500720074006900650073003203000002880000011d000002210000017afb000000100044006900730070006c006100790073010000003b00000346000000c700fffffffb0000002000730065006c0065006300740069006f006e00200062007500660066006500720200000138000000aa0000023a00000294fb00000014005700690064006500530074006500720065006f02000000e6000000d2000003ee0000030bfb0000000c004b0069006e0065006300740200000186000001060000030c00000261000000010000014f000007ecfc0200000003fb0000001e0054006f006f006c002000500072006f00700065007200740069006500730100000041000000780000000000000000fb0000000a005600690065007700730000000069000007ec000000a000fffffffb0000001200530065006c0065006300740069006f006e010000025a000000b200000000000000000000000200000490000000a9fc0100000001fb0000000a00560069006500770073030000004e00000080000002e100000197000000030000073800000056fc0100000002fb0000000800540069006d00650100000000000007380000030700fffffffb0000000800540069006d00650100000000000004500000000000000000000005560000034600000004000000040000000800000008fc0000000100000002000000010000000a0054006f006f006c00730100000000ffffffff0000000000000000
   Selection:
     collapsed: false
   Time:
@@ -1002,6 +978,6 @@ Window Geometry:
     collapsed: false
   Views:
     collapsed: true
-  Width: 1850
-  X: 140
-  Y: 54
+  Width: 1848
+  X: 72
+  Y: 27
