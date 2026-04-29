@@ -131,7 +131,7 @@ def gt_pose_in_rh_sheet_frame(tag_id):
     yaw_rad = -math.radians(theta_deg)
 
     T = np.eye(4)
-    T[:3, :3] = R.from_euler("z", yaw_rad).as_dcm()
+    T[:3, :3] = R.from_euler("z", yaw_rad).as_matrix()
     T[:3, 3] = [x_m, y_m, 0.0]
     return T
 
@@ -145,7 +145,7 @@ def transform_stamped_to_matrix(ts):
     t = ts.transform.translation
     q = ts.transform.rotation
     M = np.eye(4)
-    M[:3, :3] = R.from_quat([q.x, q.y, q.z, q.w]).as_dcm()
+    M[:3, :3] = R.from_quat([q.x, q.y, q.z, q.w]).as_matrix()
     M[:3, 3] = [t.x, t.y, t.z]
     return M
 
@@ -279,7 +279,7 @@ def compute_pair_errors(snapshot, gt_poses):
         # large errors near gimbal lock the geodesic angle is the better
         # single-number summary.
         try:
-            rpy_deg = R.from_dcm(R_err).as_euler("ZYX", degrees=True)
+            rpy_deg = R.from_matrix(R_err).as_euler("ZYX", degrees=True)
             yaw_err_deg, pitch_err_deg, roll_err_deg = rpy_deg
         except ValueError:
             roll_err_deg = pitch_err_deg = yaw_err_deg = float("nan")

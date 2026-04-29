@@ -126,7 +126,7 @@ class FilterTf:
                                                tf_prev.rotation.z, 
                                                tf_prev.rotation.w]))
 
-        # rot_delta_mat = np.matmul(self._rot_new.as_dcm(), rot_prev.as_dcm().transpose())
+        # rot_delta_mat = np.matmul(self._rot_new.as_matrix(), rot_prev.as_matrix().transpose())
         self._filter_input[0:3] = copy.deepcopy(self._trans_new)
         
         filter_arr = copy.deepcopy(self._filter_dict[tf_id].advance(self._filter_input))
@@ -149,7 +149,7 @@ class FilterTf:
             self._rot_new = R.from_quat(q_new)
 
         # 3. Create Slerp object (Using DCM for SciPy 1.3.3 compatibility)
-        slerp = Slerp([0.0, 1.0], R.from_dcm([self._rot_prev.as_dcm(), self._rot_new.as_dcm()]))
+        slerp = Slerp([0.0, 1.0], R.from_matrix([self._rot_prev.as_matrix(), self._rot_new.as_matrix()]))
 
         # 4. Interpolate and extract
         # We use [0.3] as a list to satisfy SciPy's 1D array requirement
