@@ -32,6 +32,28 @@ class LowPassFilterCoefficients(list):
         # with the coefficients for compatibility with FIR logic.
         super().__init__(self.coeffs)
 
+@dataclass
+class MediumPassFilterCoefficients(list):
+    """
+    Low pass (windowed-sinc) FIR, using a Rectangular window, 
+    30Hz sampling rate, 1.5Hz Cutoff frequency, and 1.5Hz transition bandwidth.
+    Characteristics:
+        95% Rise time, 260ms.
+        Peak unit impulse response, 0.171
+    """
+    coeffs: List[float] = field(default_factory=lambda: [
+        0.028379725838660386,
+        0.271502373147798348,
+        0.400235802027082532,
+        0.271502373147798348,
+        0.028379725838660386,
+    ])
+
+    def __post_init__(self):
+        # This ensures the 'list' part of the object is populated 
+        # with the coefficients for compatibility with FIR logic.
+        super().__init__(self.coeffs)
+
 
 class DiscreteFIRFilter:
     def __init__(self, dim: int, coefficients: list):

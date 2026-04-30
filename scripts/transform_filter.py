@@ -6,7 +6,7 @@ from lti_filters.discrete_filters import (DiscreteManualLTI, LTIBaseParams)
 
 from ramp_apriltag_detector.filter_tfs import FilterTf
 from ramp_apriltag_detector.server import Beamtracker
-from ramp_apriltag_detector.FIR_filter import LowPassFilterCoefficients, DiscreteFIRFilter
+from ramp_apriltag_detector.FIR_filter import LowPassFilterCoefficients, DiscreteFIRFilter, MediumPassFilterCoefficients
 
 
 def extract_tag_names(tag_list):
