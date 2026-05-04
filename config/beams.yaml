@@ -61,7 +61,7 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.06
+      y: 0.09
       z: 0.0
     size: 0.028
 - name: beam1
@@ -74,7 +74,7 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.06
+      y: 0.09
       z: 0.00
     size: 0.028
 - name: beam2
@@ -87,7 +87,7 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.06
+      y: 0.09
       z: 0.00
     size: 0.028
 - name: beam3
@@ -100,7 +100,7 @@ beams:
       qy: 0.0
       qz: 0.0
       x: 0.0
-      y: 0.06
+      y: 0.09
       z: 0.00
     size: 0.028
 links:
