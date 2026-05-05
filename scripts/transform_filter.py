@@ -38,7 +38,7 @@ if __name__ == "__main__":
     
     # params = LTIBaseParams(rise_time, damping_ratio)
     # filter = DiscreteManualLTI(dim, params, dt)
-    filter_coefs = LowPassFilterCoefficients()
+    filter_coefs = MediumPassFilterCoefficients()
     filter = DiscreteFIRFilter(dim,filter_coefs)
 
     # parent_frame = "camera_link"
